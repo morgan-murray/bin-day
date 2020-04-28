@@ -1,0 +1,77 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "bin day",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "binDayRequest",
+                    "slots": [
+                        {
+                            "name": "colour",
+                            "type": "AMAZON.Color"
+                        },
+                        {
+                            "name": "binType",
+                            "type": "BINDAY_type"
+                        }
+                    ],
+                    "samples": [
+                        "when is the next {binType} collection",
+                        "when is the next {colour} bin pickup",
+                        "when is the next {colour} bin collection",
+                        "when is the next collection of my {colour} bin",
+                        "whens my next bin collection",
+                        "whats my next bin collection"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "BINDAY_type",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "garden waste",
+                                "synonyms": [
+                                    "grass",
+                                    "green waste",
+                                    "garden rubbish"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "recycling"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "landfill",
+                                "synonyms": [
+                                    "non-recycling",
+                                    "rubbish"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
