@@ -366,12 +366,9 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
 
 sb = StandardSkillBuilder()
 
-sb.skill_id = open("skillId").read()
-print(sb.skill_id)
-
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(BinRequestHandler())
-
+sb.add_request_handler(HelloWorldIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(SessionEndedRequestHandler())
