@@ -28,8 +28,7 @@ NOTIFY_MISSING_PERMISSIONS = 'Please enable Location permissions in the Amazon A
 ERROR = "Uh Oh. Looks like something went wrong."
 NO_ADDRESS_FOUND = "I could not find your address in the bin lookup service."
 PERMISSIONS = ['read::alexa:device:all:address']
-COLOUR_PATH = "intent.slots.colour"
-TYPE_PATH = "intent.slots.type"
+
 GREEN_BIN = "green bin"
 BROWN_BIN = "brown bin"
 BLACK_BIN = "black bin"
@@ -108,8 +107,6 @@ class BinRequestHandler(AbstractRequestHandler):
 
         user_address = ""
         SEPARATOR = ", "
-        address_object_keys = ['address_line1','address_line2','address_line3','city','country_code','district_or_county','postal_code','state_or_region']
-        desired_address_object_keys = ['address_line1','address_line2','city']
         
         if addr.address_line1 is not None:
             user_address += addr.address_line1 + SEPARATOR
@@ -282,24 +279,6 @@ class HelpIntentHandler(AbstractRequestHandler):
             handler_input.response_builder
                 .speak(speak_output)
                 .ask(speak_output)
-                .response
-        )
-
-
-class CancelOrStopIntentHandler(AbstractRequestHandler):
-    """Single handler for Cancel and Stop Intent."""
-    def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return (ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input) or
-                ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input))
-
-    def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speak_output = "Goodbye!"
-
-        return (
-            handler_input.response_builder
-                .speak(speak_output)
                 .response
         )
 
