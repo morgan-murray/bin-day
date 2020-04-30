@@ -1,0 +1,2 @@
+Icon used from http://www.iconarchive.com/show/simple-green-icons-by-simplefly/trash-can-icon.html under CC Attribution-No Derivative 4.0 licence
+Code samples reused from https://github.com/alexa/alexa-skills-kit-sdk-for-python under the Apache licence.
