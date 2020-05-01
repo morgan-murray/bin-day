@@ -44,7 +44,10 @@
                         "tell me about my {binType} bin",
                         "tell me about my {binColour} bin",
                         "when will my {binColour} bin be collected",
-                        "when will my {binType} bin be collected"
+                        "when will my {binType} bin be collected",
+                        "{binType}",
+                        "{binColour}",
+                        "all"
                     ]
                 },
                 {
@@ -57,7 +60,10 @@
                         "whats next",
                         "whens my next bin collection",
                         "whats my next bin collection",
-                        "which bin is next to be collected"
+                        "which bin is next to be collected",
+                        "which bin is tomorrow",
+                        "what bin is tomorrow",
+                        "next"
                     ]
                 }
             ],
@@ -84,7 +90,11 @@
                             "name": {
                                 "value": "landfill",
                                 "synonyms": [
+                                    "land fill",
                                     "non-recycling",
+                                    "none recycling",
+                                    "nun recycling",
+                                    "no recycling",
                                     "rubbish"
                                 ]
                             }

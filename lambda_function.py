@@ -80,6 +80,7 @@ def generate_next_bin_output(collection_details):
 
 def generate_output(slots, sorted_results, isNextBinRequest):
         
+    # default to reaidng out everything before trying to guess what Alexa heard
     bintype = ALL_BINS
       
     if isNextBinRequest:
@@ -87,16 +88,16 @@ def generate_output(slots, sorted_results, isNextBinRequest):
     elif 'binType' in slots and slots['binType'].value:
         if slots['binType'].value.lower() == "recycling":
             bintype = GREEN_BIN
-        elif slots['binType'].value.lower() == "landfill":
+        elif "land" in slots['binType'].value.lower() or  "rubbish" in slots['binType'].value.lower() or "none recycling" in slots['binType'].value.lower():
             bintype = BLACK_BIN
-        elif slots['binType'].value.lower() == "garden waste":
+        elif "garden" in slots['binType'].value.lower() or "grass" in slots['binType'].value.lower() or "green waste" in slots['binType'].value.lower():
             bintype = BROWN_BIN
     elif 'binColour' in slots and slots['binColour'].value:
         if slots['binColour'].value.lower() == "green":
             bintype = GREEN_BIN
-        elif slots['binColour'].value.lower() == "black" or slots['binColour'].value.lower() == "grey":
+        elif slots['binColour'].value.lower() == "black" or slots['binColour'].value.lower() == "grey" or "land" in slots['binType'].value.lower() or  "rubbish" in slots['binType'].value.lower() or "none recycling" in slots['binType'].value.lower():
             bintype = BLACK_BIN
-        elif slots['binColour'].value.lower() == "brown":
+        elif slots['binColour'].value.lower() == "brown" or "garden" in slots['binType'].value.lower() or "grass" in slots['binType'].value.lower() or "green waste" in slots['binType'].value.lower():
             bintype = BROWN_BIN
         
     output = ""
@@ -246,7 +247,7 @@ class BinRequestHandler(AbstractRequestHandler):
         
         req_envelope = handler_input.request_envelope
         slots =  req_envelope.request.intent.slots
-
+        print(slots)
         response_builder = handler_input.response_builder
         service_client_fact = handler_input.service_client_factory
         
