@@ -299,10 +299,7 @@ class NextBinRequestHandler(AbstractRequestHandler):
         handler_input.isNextBinRequest = True
         print("Asked for next bin")
         binRequestHandler = BinRequestHandler()
-        return binRequestHandler.handle(handler_input)
-    
-    
-    
+        return binRequestHandler.handle(handler_input)    
     
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
