@@ -23,7 +23,7 @@
                     "name": "binDayRequest",
                     "slots": [
                         {
-                            "name": "colour",
+                            "name": "binColour",
                             "type": "AMAZON.Color"
                         },
                         {
@@ -33,11 +33,37 @@
                     ],
                     "samples": [
                         "when is the next {binType} collection",
-                        "when is the next {colour} bin pickup",
-                        "when is the next {colour} bin collection",
-                        "when is the next collection of my {colour} bin",
+                        "when is the next {binColour} bin pickup",
+                        "when is the next {binColour} bin collection",
+                        "when is my next {binType} collection",
+                        "when is my next {binColour} bin pickup",
+                        "when is my next {binColour} bin collection",
+                        "when is my next collection of my {binColour} bin",
+                        "tell me about my {binColour} bin",
+                        "tell me about the {binColour} bin",
+                        "tell me about my {binType} bin",
+                        "tell me about my {binColour} bin",
+                        "when will my {binColour} bin be collected",
+                        "when will my {binType} bin be collected",
+                        "{binType}",
+                        "{binColour}",
+                        "all"
+                    ]
+                },
+                {
+                    "name": "nextBinIntent",
+                    "slots": [],
+                    "samples": [
+                        "when is my next bin collection",
+                        "which is next",
+                        "which bin is next",
+                        "whats next",
                         "whens my next bin collection",
-                        "whats my next bin collection"
+                        "whats my next bin collection",
+                        "which bin is next to be collected",
+                        "which bin is tomorrow",
+                        "what bin is tomorrow",
+                        "next"
                     ]
                 }
             ],
@@ -64,7 +90,11 @@
                             "name": {
                                 "value": "landfill",
                                 "synonyms": [
+                                    "land fill",
                                     "non-recycling",
+                                    "none recycling",
+                                    "nun recycling",
+                                    "no recycling",
                                     "rubbish"
                                 ]
                             }
