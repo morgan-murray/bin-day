@@ -1,0 +1,101 @@
+name: Test and deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: bin-day-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  AWS_REGION: eu-west-2
+  AWS_DEFAULT_REGION: eu-west-2
+  AWS_EC2_METADATA_DISABLED: "true"
+  AWS_DEPLOY_ROLE_ARN: arn:aws:iam::016696950356:role/bin-day-github-deploy
+  AWS_ARTIFACT_BUCKET: bin-day-deployments-016696950356-eu-west-2
+  ALEXA_SKILL_ID: amzn1.ask.skill.e21b1061-6bb8-4fff-84e0-9fee97966ac6
+  STACK_NAME: bin-day
+  PYTHON_VERSION: "3.13"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install test dependencies
+        run: python -m pip install -r requirements.txt pytest
+
+      - name: Run tests
+        run: |
+          printf '%s' 'amzn1.ask.skill.00000000-0000-0000-0000-000000000000' > skillId
+          pytest
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Build Lambda package
+        run: |
+          test -n "$ALEXA_SKILL_ID"
+          python -m pip install \
+            --disable-pip-version-check \
+            --no-compile \
+            --requirement requirements.txt \
+            --target build
+          find build -type d -name __pycache__ -prune -exec rm -rf '{}' +
+          find build -type d \( -name tests -o -name test \) -prune -exec rm -rf '{}' +
+          find build -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+          cp lambda_function.py build/
+          printf '%s' "$ALEXA_SKILL_ID" > build/skillId
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload deployment package
+        run: |
+          aws cloudformation package \
+            --template-file template.yaml \
+            --s3-bucket "$AWS_ARTIFACT_BUCKET" \
+            --s3-prefix "$STACK_NAME" \
+            --output-template-file packaged.yaml
+
+      - name: Deploy production stack
+        run: |
+          aws cloudformation deploy \
+            --template-file packaged.yaml \
+            --stack-name "$STACK_NAME" \
+            --parameter-overrides "AlexaSkillId=$ALEXA_SKILL_ID" \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --no-fail-on-empty-changeset \
+            --tags Application=bin-day Environment=production
+
+      - name: Show Alexa endpoint
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name "$STACK_NAME" \
+            --query "Stacks[0].Outputs[?OutputKey=='FunctionArn'].OutputValue" \
+            --output text

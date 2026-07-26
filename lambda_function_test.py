@@ -100,7 +100,23 @@ def test_bdf_generate_individual_bin_output():
     assert bdf.generate_individual_bin_output("black", generate_date_for_speech_data1) == "I cannot find a date on which your black bin will be collected"
     assert bdf.generate_individual_bin_output("green bin", generate_date_for_speech_data4) == "Your green bin will next be collected " + generate_date_for_speech_result4
 
-def test_bdf_get_address():
+def test_bdf_get_address(monkeypatch):
+    class AddressLookupResponse:
+        @staticmethod
+        def json():
+            return {
+                "jArray": [
+                    {
+                        "UPRN": "10023011411",
+                        "Address_Short": "Long View, Ab Lench Road, Abbots Lench, EVESHAM",
+                    }
+                ]
+            }
+
+    monkeypatch.setattr(
+        "lambda_function.requests.get",
+        lambda *_args, **_kwargs: AddressLookupResponse(),
+    )
     assert bdf.get_address(test_device_address) == test_council_address
 
 def test_bdf_sort_results():
