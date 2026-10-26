@@ -4,7 +4,7 @@ ask-sdk-core==1.19.0
 astroid==4.0.4
 beautifulsoup4==4.15.0
 bs4==0.0.2
-certifi==2026.7.22
+certifi==2026.10.19
 chardet==7.4.3
 colorama==0.4.6
 idna==3.18
